@@ -1,5 +1,4 @@
 
 
 ## todo:
- 
-  mini batch vs time
+ time evaluation function for mini batch evaluation for loop
