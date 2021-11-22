@@ -1,7 +1,7 @@
-tic
-   
 
 %% Fetch Dataset 75/25 train/val splitt
+
+
 digitDatasetPath = fullfile(matlabroot,'toolbox','nnet','nndemos', ...
     'nndatasets','DigitDataset');
 fullDataset = imageDatastore(digitDatasetPath, ...
@@ -25,15 +25,24 @@ NN_layers = [
     classificationLayer('Name','classification')
    ];
 
+%%
+
 
 %% Hyperparams
+start_mbatch = floor(255/6);
+end_mbatch = floor(255/6) * 6;
+
+mbatches = addedarray(start_mbatch, end_mbatch, start_mbatch);
 start_lr = 10^-6;
 end_lr = 10^-1;
-stepmulti = 10;
-lrs = fetchlearningrates(start_lr, end_lr, stepmulti);
+
+lrs = multiplicatedarray(start_lr, end_lr, 10);
 epochs = 5;
 
+val_freq = 30;
+
 %% eval
+
 
 opts = {'adam','sgdm'};
 for opt =1:length(opts)
@@ -44,13 +53,13 @@ for opt =1:length(opts)
         'InitialLearnRate',lr, ...
         'MaxEpochs',epochs, ... 
         'ValidationData',ValidationSet, ...
-        'ValidationFrequency',30, ...
+        'ValidationFrequency',val_freq, ...
         'Verbose',false);
         [net, results] = trainNetwork(TrainSet,NN_layers,options);
     
         
         x = results.FinalValidationAccuracy;
-        ac(:,lr) = x;
+        ac(lr) = x;
         
         
     end
@@ -58,17 +67,53 @@ for opt =1:length(opts)
 [val,in] = max(ac);
 sprintf('%.15g  is the best accuracy and was achieved with the learning rate %.15g for the optimizer %s',val,lrs(:,in), opts{opt})
 best_lr = lrs(:,in);
+
+
+
+% working with different mini batch sizes
+
+for mb = 1:length(mbatches)
+mean_val = zeros(size(mbatches));
+modelOptions = trainingOptions(opts{opt}, ...
+        'InitialLearnRate',lr, ...
+        'MaxEpochs',epochs, ... 
+        'ValidationData',ValidationSet, ...
+        'ValidationFrequency',val_freq, ...
+        'MiniBatchSize',mbatches(mb), ...
+        'Verbose',false);
+        [net, results] = trainNetwork(TrainSet,NN_layers,options);
+        x = results.ValidationAccuracy;
+        x(find(isnan(x)))=[];
+        mean_val(mb) = mean(x)
+
 end
-toc
+[val,in] = max(mean_val);
+sprintf('%.15g  is the mean accuracy for minibatchsize = %.15g with the learning rate %.15g and the optimizer %s',val,mbatches(in), best_lr, opts{opt})
+end
+
 %% 
-function lrs = fetchlearningrates(start_lr, end_lr, stepmulti)
-    i=start_lr;
+
+function arr = addedarray(startval, endval, stepadd)
+    i=startval;
+    k = 1;
+    
+    arr = [];
+
+    while i~=endval
+        arr(k) = i;
+       i = i + stepadd;
+       k = k + 1;
+    end
+     
+end
+function arr = multiplicatedarray(startval, endval, stepmulti)
+    i=startval;
     k = 1;
 
-    lrs = [];
+    arr = [];
 
-    while i~=end_lr
-       lrs(k) = i;
+    while i~=endval
+       arr(k) = i;
        i = i * stepmulti;
        k = k + 1;
     end
