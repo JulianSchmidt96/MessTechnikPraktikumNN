@@ -26,13 +26,14 @@ NN_layers = [
    ];
 
 
-%%
+%% Hyperparams
 start_lr = 10^-6;
 end_lr = 10^-1;
 stepmulti = 10;
 lrs = fetchlearningrates(start_lr, end_lr, stepmulti);
 epochs = 5;
-%%
+
+%% eval
 
 opts = {'adam','sgdm'};
 for opt =1:length(opts)
