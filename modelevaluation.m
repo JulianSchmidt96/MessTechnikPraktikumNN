@@ -25,10 +25,10 @@ NN_layers = [
     classificationLayer('Name','classification')
    ];
 
-%%
-
 
 %% Hyperparams
+
+
 start_mbatch = floor(255/6);
 end_mbatch = floor(255/6) * 6;
 
@@ -72,8 +72,10 @@ best_lr = lrs(:,in);
 
 % working with different mini batch sizes
 
-for mb = 1:length(mbatches)
 mean_val = zeros(size(mbatches));
+
+for mb = 1:length(mbatches)
+    tic
 modelOptions = trainingOptions(opts{opt}, ...
         'InitialLearnRate',lr, ...
         'MaxEpochs',epochs, ... 
@@ -84,11 +86,11 @@ modelOptions = trainingOptions(opts{opt}, ...
         [net, results] = trainNetwork(TrainSet,NN_layers,options);
         x = results.ValidationAccuracy;
         x(find(isnan(x)))=[];
-        mean_val(mb) = mean(x)
-
+        mean_val(mb) = mean(x);
+    toc
 end
 [val,in] = max(mean_val);
-sprintf('%.15g  is the mean accuracy for minibatchsize = %.15g with the learning rate %.15g and the optimizer %s',val,mbatches(in), best_lr, opts{opt})
+sprintf('%.15g  is the best mean accuracy for minibatchsize = %.15g with the learning rate %.15g and the optimizer %s',val,mbatches(in), best_lr, opts{opt})
 end
 
 %% 
