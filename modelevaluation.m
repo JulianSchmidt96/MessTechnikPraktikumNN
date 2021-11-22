@@ -1,7 +1,7 @@
 tic
    
 
-%% Fetch Dataset
+%% Fetch Dataset 75/25 train/val splitt
 digitDatasetPath = fullfile(matlabroot,'toolbox','nnet','nndemos', ...
     'nndatasets','DigitDataset');
 fullDataset = imageDatastore(digitDatasetPath, ...
@@ -31,31 +31,33 @@ start_lr = 10^-6;
 end_lr = 10^-1;
 stepmulti = 10;
 lrs = fetchlearningrates(start_lr, end_lr, stepmulti);
+epochs = 5;
 %%
 
-opt = 'adam';
+opts = {'adam','sgdm'};
+for opt =1:length(opts)
 
-ac = zeros(size(lrs));
-for lr = 1:length(lrs)
-    modelOptions = trainingOptions(opt, ...
-    'InitialLearnRate',0.0001, ...
-    'MaxEpochs',5, ...
-    'Shuffle','every-epoch', ...
-    'ValidationData',ValidationSet, ...
-    'ValidationFrequency',30, ...
-    'Verbose',false);
-    [net, results] = trainNetwork(TrainSet,NN_layers,options);
+    ac = zeros(size(lrs));
+    for lr = 1:length(lrs)
+        modelOptions = trainingOptions(opts{:,opt}, ...
+        'InitialLearnRate',lr, ...
+        'MaxEpochs',epochs, ... 
+        'ValidationData',ValidationSet, ...
+        'ValidationFrequency',30, ...
+        'Verbose',false);
+        [net, results] = trainNetwork(TrainSet,NN_layers,options);
+    
+        
+        x = results.FinalValidationAccuracy;
+        ac(:,lr) = x;
+        
+        
+    end
 
-    
-    x = results.FinalValidationAccuracy;
-    ac(:,lr) = x;
-    
-    
-end
-%% Get best result
 [val,in] = max(ac);
-sprintf('%.15g  is the best accuracy and was achieved with the learning rate %.15g and the optimizer %s',val,lrs(:,in), opt)
+sprintf('%.15g  is the best accuracy and was achieved with the learning rate %.15g for the optimizer %s',val,lrs(:,in), opts{opt})
 best_lr = lrs(:,in);
+end
 toc
 %% 
 function lrs = fetchlearningrates(start_lr, end_lr, stepmulti)
