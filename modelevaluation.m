@@ -1,3 +1,6 @@
+tic
+   
+
 %% Fetch Dataset
 digitDatasetPath = fullfile(matlabroot,'toolbox','nnet','nndemos', ...
     'nndatasets','DigitDataset');
@@ -34,7 +37,7 @@ opt = 'adam';
 
 ac = zeros(size(lrs));
 for lr = 1:length(lrs)
-    modelOptions = trainingOptions('opt', ...
+    modelOptions = trainingOptions(opt, ...
     'InitialLearnRate',0.0001, ...
     'MaxEpochs',5, ...
     'Shuffle','every-epoch', ...
@@ -53,6 +56,7 @@ end
 [val,in] = max(ac);
 sprintf('%.15g  is the best accuracy and was achieved with the learning rate %.15g and the optimizer %s',val,lrs(:,in), opt)
 best_lr = lrs(:,in);
+toc
 %% 
 function lrs = fetchlearningrates(start_lr, end_lr, stepmulti)
     i=start_lr;
