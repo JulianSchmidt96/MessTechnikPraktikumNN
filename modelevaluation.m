@@ -55,7 +55,7 @@ for opt =1:length(opts)
         'ValidationData',ValidationSet, ...
         'ValidationFrequency',val_freq, ...
         'Verbose',false);
-        [net, results] = trainNetwork(TrainSet,NN_layers,options);
+        [net, results] = trainNetwork(TrainSet,NN_layers,modelOptions);
     
         
         x = results.FinalValidationAccuracy;
@@ -83,7 +83,7 @@ modelOptions = trainingOptions(opts{:,opt}, ...
         'ValidationFrequency',val_freq, ...
         'MiniBatchSize',mbatches(mb), ...
         'Verbose',false);
-        [net, results] = trainNetwork(TrainSet,NN_layers,options);
+        [net, results] = trainNetwork(TrainSet,NN_layers,modelOptions);
         x = results.ValidationAccuracy;
         x(find(isnan(x)))=[];
         mean_val(mb) = mean(x);
