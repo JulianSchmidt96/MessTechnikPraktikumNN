@@ -73,7 +73,7 @@ best_lr = lrs(:,in);
 % working with different mini batch sizes
 
 mean_val = zeros(size(mbatches));
-
+times = zeros(size(mbatches));
 for mb = 1:length(mbatches)
     tic
 modelOptions = trainingOptions(opts{:,opt}, ...
@@ -83,14 +83,18 @@ modelOptions = trainingOptions(opts{:,opt}, ...
         'ValidationFrequency',val_freq, ...
         'MiniBatchSize',mbatches(mb), ...
         'Verbose',false);
-        [net, results] = trainNetwork(TrainSet,NN_layers,modelOptions);
-        x = results.ValidationAccuracy;
-        x(find(isnan(x)))=[];
-        mean_val(mb) = mean(x);
+        %[net, results] = trainNetwork(TrainSet,NN_layers,modelOptions);
+        f = @() trainNetwork(TrainSet,NN_layers,modelOptions);
+        time = timeit(f);
+        %x = results.ValidationAccuracy;
+       % x(find(isnan(x)))=[];
+        %mean_val(mb) = mean(x);
+        times(mb) = time;
     toc
 end
-[val,in] = max(mean_val);
-sprintf('%.15g  is the best mean accuracy for minibatchsize = %.15g with the learning rate %.15g and the optimizer %s',val,mbatches(in), best_lr, opts{opt})
+%[val,in] = max(mean_val);
+[val,in] =min(times);
+sprintf('%.15g  is the fastest training time eith a minibatchsize of  minibatchsize = %.15g with the learning rate %.15g and the optimizer %s',val,mbatches(in), best_lr, opts{opt})
 end
 
 %% 
