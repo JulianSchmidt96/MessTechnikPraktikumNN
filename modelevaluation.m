@@ -12,7 +12,6 @@ numTrainFiles = 750;
 %% def Model
 
 
-
 NN_layer = [
     imageInputLayer([28 28 1],'Normalization','none','Name','input')
     
@@ -37,9 +36,9 @@ start_lr = 10^-6;
 end_lr = 10^-1;
 
 lrs = multiplicatedarray(start_lr, end_lr, 10);
-epochs = 10;
+epochs = 20;
 
-val_freq = 30;
+val_freq = 10;
 
 %% eval
 
@@ -53,6 +52,7 @@ for opt =1:length(opts)
         modelOptions = trainingOptions(opts{:,opt}, ...
         'InitialLearnRate',lr, ...
         'MaxEpochs',epochs, ... 
+        'Shuffle','every-epoch', ...
         'ValidationData',ValidationSet, ...
         'ValidationFrequency',val_freq, ...
         'Verbose',false);
@@ -72,7 +72,7 @@ if max(ac) > valacc
     [valacc,inlr] = max(ac);
 end
 end
-sprintf('%.15g  is the best accuracy and was achieved with the learning rate %.15g for the optimizer %s',valacc,lrs(:,inlr), opts{opt})
+sprintf('%.15g  is the best accuracy and was achieved with the learning rate %.15g and the optimizer %s',valacc,lrs(:,inlr), opts{opt})
 best_lr = lrs(:,inlr);
 
 
@@ -87,6 +87,7 @@ modelOptions = trainingOptions(opts{:,opt}, ...
         'InitialLearnRate',lr, ...
         'MaxEpochs',epochs, ... 
         'ValidationData',ValidationSet, ...
+        'Shuffle','every-epoch', ...
         'ValidationFrequency',val_freq, ...
         'MiniBatchSize',mbatches(mb), ...
         'Verbose',false);
@@ -108,19 +109,26 @@ sprintf('%.15g seconds is the fastest training time with a minibatchsize of  min
 
 %% train again with best hyperparams
 
-epochs = 100
+epochs = 30;
 
 modelOptions = trainingOptions(opts{:,opt}, ...
         'InitialLearnRate',lrs(inlr), ...
         'MaxEpochs',epochs, ... 
         'ValidationData',ValidationSet, ...
+        'Shuffle','every-epoch', ...
         'ValidationFrequency',val_freq, ...
-        'MiniBatchSize',mbatches(mbatches(inmb)), ...
+        'MiniBatchSize',mbatches(inmb), ...
         'Verbose',false, ...
         'Plots','training-progress');
     
 [net, results] = trainNetwork(TrainSet,NN_layer,modelOptions);
+save(net)
+save(results)
+%% evaluate accuracy
+YPred = classify(net,ValidationSet);
+YValidation = ValidationSet.Labels;
 
+accuracy = sum(YPred == YValidation)/numel(YValidation)
 %% 
 
 function arr = addedarray(startval, endval, stepadd)
