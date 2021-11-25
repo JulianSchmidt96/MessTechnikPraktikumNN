@@ -70,7 +70,7 @@ Validationsdaten auf.
 \subsubsection{Lösung}
 \\
 Die Daten werden aus der Neuronale Netze Toolbox Bibliothek geladen.\\
-aus 1000 geladenen Daten werden 750 für Trainings-Daten und 250 für Validierungs-Daten verwendet
+aus 1000 geladenen Daten pro Ziffer werden 750 für Trainings-Daten und 250 für Validierungs-Daten verwendet
 
 \\
 
@@ -177,4 +177,17 @@ Die Ergebnisse haben gezeigt, dass Änderungen der Minibatch-Größe einen direk
 Beim Testen hat sich gezeigt, dass für verschiedene Minibatch-Größe unterschiedliche Genauigkeiten erreicht wurden.\\
 Das liegt allerdings mit hoher Wahrscheinlichkeit da dran, dass jede Prädiktion auf statistischen Größen basiert.\\
 Wenn ein Neuronales Netz mehrfach mit exakt gleichen Parametern trainiert wird, ist es  unmöglich immer zu 100 Prozent das gleiche Ergebnis zu erhalten.
+\\
+
+Eine deutliche Genauigkeitsverbessserung lies sich durch das hinzufügen der Zeile:\\
+
+\begin{listing}
+'Shuffle','every-epoch', ...
+\end{listing}
+\\
+zu den modeloptionen.
+\\genauigkeit, allerdings steigt damit die Laufzeit sehr stark.\\
+Die Validationsfrequenz auf einen sehr kleinen Wert zusätzen sorgt ebenfalls für eine erhöhte 
+Grundsätzlich lässt sich mit relativ wenig Aufwand eine hohe Genauigkeit in der Vorhersage von Ziffern auf 28x28 Pixel Bilder mit dem MNIST Datensatz erreichen.\\
+
 \end{document}
