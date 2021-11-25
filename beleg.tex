@@ -1,0 +1,50 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\usepackage{color}   
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{german}
+
+\usepackage[onehalfspacing]{setspace}
+
+
+\let\stdsection\section
+\setlength{\parindent}{0in} 
+
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Neuronale Netze in der Bildverarbeitung Versuch 1}
+\author{Julian Schmidt, Vincenz Forkel}
+
+\begin{document}
+\maketitle
+
+\section{Einführung}
+Ziel des ersten Versuchs des Praktikums Neuronale Netze in der Bildverarbeitung im Wintersemester 2021/22 ist es Grundlagen des Aufbaus und der Arbeit mit Neuronalen Netzen kennen zu lernen.\\
+Konkret wird hier der MNIST-Datensatz verwendet, für den ein Neuronales Netz darauf trainiert werden soll Ziffern zwischen 0 und 9 zu klassifizieren.\\
+
+Der MNIST (Modified National Institute of Standards and Technology database) ist eine öffentlich verfügbare Datenbank von handgeschriebenen Ziffern.\\
+Wobei jede Ziffer als 28 × 28 Pixel großes Graustufen-Bild gespeichert ist.\\
+
+Verwendet wird hierfür die Script Sprache Matlab
+\newpage
+\section{Netzwerk Architektur}
+Um die Architektur des Netzwerkes zu erstellen wurde die Matlab-Toolbox für Neuronale Netze verwendet.
+
+\lstinputlisting{layers.m}
+
+Wie hier zu sehen ist besteht das Netz aus zwei 'fully connected layer', einem 'relu layer', einem 'softmax layer' und einem 'classification layer'.
+
+
+\end{document}
