@@ -38,7 +38,10 @@ Konkret wird hier der MNIST-Datensatz verwendet, für den ein Neuronales Netz da
 Der MNIST (Modified National Institute of Standards and Technology database) ist eine öffentlich verfügbare Datenbank von handgeschriebenen Ziffern.\\
 Wobei jede Ziffer als 28 × 28 Pixel großes Graustufen-Bild gespeichert ist.\\
 
-Verwendet wird hierfür die Script Sprache Matlab
+Verwendet wird hierfür die Skript Sprache Matlab.\\
+
+alle Skripte und Lösungen befinden sich in diesem Github Repository:\\
+https://github.com/JulianSchmidt96/MessTechnikPraktikumNN/
 \newpage
 \section{Netzwerk Architektur}\label{architektur}
 Um die Architektur des Netzwerkes zu erstellen wurde die Matlab-Toolbox für Neuronale Netze verwendet.
@@ -57,14 +60,14 @@ Wie hier zu sehen ist besteht das Netz aus zwei 'fully connected layer', einem '
 \end{center}
 
 
-\section{Aufgabe 1}
-
-\subsection{Aufgabenstellung}
+\section{Aufgaben}
+\subsection{Aufgabe 1}
+\subsubsection{Aufgabenstellung}
 \\
 1. Nutzen Sie die gegebene Matlab-Vorlage und laden Sie Bilder und Labels aus dem MNIST-Datensatz. Teilen Sie die Daten in Trainings- und
 Validationsdaten auf.
 \\
-\subsection{Lösung}
+\subsubsection{Lösung}
 \\
 Die Daten werden aus der Neuronale Netze Toolbox Bibliothek geladen.\\
 aus 1000 geladenen Daten werden 750 für Trainings-Daten und 250 für Validierungs-Daten verwendet
@@ -75,9 +78,9 @@ aus 1000 geladenen Daten werden 750 für Trainings-Daten und 250 für Validierun
 
 \\
 
-\section{Aufgabe2}
+\subsection{Aufgabe2}
 \\
-\subsection{Aufgabenstellung}
+\subsubsection{Aufgabenstellung}
 \\
 Erstellen Sie ein neuronales Netz zur Bildklassifizierung. Dieses sollte zum Beispiel aus einem Image input layer, einem Fully connected
 layer, einem ReLU layer, einem weiteren Fully connected layer, einem Softmax layer und einem Classification layer (nur bei Verwendung der Funktion trainNetwork) bestehen. Achten Sie darauf, dass
@@ -86,14 +89,14 @@ erkennenden Klassen benötigt, um die Klassifizierung zu ermöglichen.
 Benutzen Sie den Befehl analyzeNetwork, um ihre Struktur auf Fehler
 zu prüfen. Legen Sie dann die Hyperparameter für das Training fest.
 \\
-\subsection{Lösung}
+\subsubsection{Lösung}
 \\
 Prinzipiell geh es hier bei um die Netzwerkarchitektur, welche bereits in Abschnitt 2 erläutert.
 
 \\
-\section{Aufgabe 3}
+\subsection{Aufgabe 3}
 \\
-\subsection{Aufgabenstellung}
+\subsubsection{Aufgabenstellung}
 Trainieren Sie das neuronale Netz mit der Funktion trainNetwork oder
 mit einer eigenen Trainingsschleife. Es ist wünschenswert, wenn Sie
 beide Varianten ausprobieren. Bei korrekter Implementierung werden
@@ -103,7 +106,7 @@ Training Neuronaler Netze gewinnen. Nutzen Sie zunächst für beide
 Optionen den Solver Adam und evaluieren Sie das Ergebnis, indem Sie
 das Netz anhand der Validierungsdaten testen. Mit geeigneten Parametern sollte es möglich sein, eine Genauigkeit von mindestens 95 %
 zu erreichen.\\
-\subsection{Lösung}
+\subsubsection{Lösung}
 \\
 Hierfür werden relevante Trainingsoptionen in der Variable 'modelOptions zwischengespeichert.
 \\
@@ -111,18 +114,18 @@ Hierfür werden relevante Trainingsoptionen in der Variable 'modelOptions zwisch
 \\
 Mit dem Optimizer Adam lies sich bei einer Trainingsdauer von 30 Epochen eine finale Validierungsgenauigkeit von ca. 98 Prozent erreichen.
 \\
-\section{Aufgabe 4}
+\subsection{Aufgabe 4}
 \\
-\subsection{Aufgabenstellung}
+\subsubsection{Aufgabenstellung}
 \\Ermitteln Sie die mittlere Klassifizierungsgenauigkeit des NN in Ab-
 hängigkeit der eingelesenen Ziffern.
 
 Stellen Sie das Ergebnis in einem geeigneten Diagramm (µ = f (Ziffer))
 dar
-\subsection{Lösung}
-\section{Aufgabe 5}
+\subsubsection{Lösung}
+\subsection{Aufgabe 5}
 \\
-\subsection{Aufgabenstellung}
+\subsubsection{Aufgabenstellung}
 \\
 Vergleichen Sie nun die beiden Solver Adam und Sgdm mit mindestens 6
 verschiedenen Lernraten zwischen 10−6 und 10−1 . Stellen Sie die er-
@@ -130,12 +133,12 @@ reichte mittlere Klassifizierungsgenauigkeit in Abhängigkeit von der
 Lernrate dar und verwenden Sie für die Lernrate eine logarithmische
 Achse.
 \\
-\subsection{Lösung}
+\subsubsection{Lösung}
 in zwei for-schleifen werden beide optimizier mit den verschiedenen Lernraten und sonst gleichen parametern getestet und es werden Lernrate+Optimizer mit der höchsten finalen Genauigkeit übernommen.
 \lstinputlisting{findlr.m}
 
 
-\Aufgabe{6}
+\subAufgabe{6}
 \subsection{Aufgabenstellung}
 Testen Sie außerdem mindestens 5 verschiedene Größen des Mini-Batch
 zwischen 16 und 256. Wählen Sie aus der vorherigen Aufgabe eine Lern-
@@ -150,12 +153,12 @@ Es wird ein Array aus 5 verschiedenen Minibatchgrößen erstllt und dann wird da
 
 \lstinputlisting{findmbatch.m}
 
-\section{Aufgabe 7}
-\subsection{Aufgabenstellung}
+\subsection{Aufgabe 7}
+\subsubsection{Aufgabenstellung}
 Leiten Sie aus den Trainingsergebnissen Zusammenhänge zwischen den
 untersuchten Hyperparametern und der Trainingszeit sowie der erreichten Genauigkeit bei der Klassifizierung ab. Formulieren Sie hierfür eine
 kurze Diskussion.
-\subsection{Lösung}
+\subsubsection{Lösung}
 Es hat sich eindeutig gezeigt, dass Adam ein genauerer Optimizer als SGDM ist.
 
 Die Lernrate scheint ebenfalls einen großen Einfluss auf die Genauigkeit des Netzes zu haben.
@@ -173,5 +176,5 @@ Eine geschickte Anpassung der Minibatch-Größen würde die Trainings-Dauer und 
 Die Ergebnisse haben gezeigt, dass Änderungen der Minibatch-Größe einen direkten Einfluss auf die Laufzeit hat.\\
 Beim Testen hat sich gezeigt, dass für verschiedene Minibatch-Größe unterschiedliche Genauigkeiten erreicht wurden.\\
 Das liegt allerdings mit hoher Wahrscheinlichkeit da dran, dass jede Prädiktion auf statistischen Größen basiert.\\
-Wenn ein Neuronales Netz mehrfach mit exakt gleichen Parametern trainiert wird, ist es  unmöglich immer zu 100 Prozent das gleiche Ergebnis zu erhalten
+Wenn ein Neuronales Netz mehrfach mit exakt gleichen Parametern trainiert wird, ist es  unmöglich immer zu 100 Prozent das gleiche Ergebnis zu erhalten.
 \end{document}
