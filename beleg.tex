@@ -100,7 +100,7 @@ beide Varianten ausprobieren. Bei korrekter Implementierung werden
 beide Wege funktionieren und zu vergleichbaren Ergebnissen führen.
 Jedoch können Sie bei der erfolgreichen Implementierung einer benutzerdefinierten Trainingsschleife ein umfangreiches Verständnis zum
 Training Neuronaler Netze gewinnen. Nutzen Sie zunächst für beide
-Optionen den Solver adam und evaluieren Sie das Ergebnis, indem Sie
+Optionen den Solver Adam und evaluieren Sie das Ergebnis, indem Sie
 das Netz anhand der Validierungsdaten testen. Mit geeigneten Parametern sollte es möglich sein, eine Genauigkeit von mindestens 95 %
 zu erreichen.\\
 \subsection{Lösung}
@@ -124,7 +124,7 @@ dar
 \\
 \subsection{Aufgabenstellung}
 \\
-Vergleichen Sie nun die beiden Solver adam und sgdm mit mindestens 6
+Vergleichen Sie nun die beiden Solver Adam und Sgdm mit mindestens 6
 verschiedenen Lernraten zwischen 10−6 und 10−1 . Stellen Sie die er-
 reichte mittlere Klassifizierungsgenauigkeit in Abhängigkeit von der
 Lernrate dar und verwenden Sie für die Lernrate eine logarithmische
@@ -146,15 +146,32 @@ des Mini-Batches dar.
 \\
 
 \subsection{Lösung}
-Es wird ein Array aus 5 verschiedenen Minibatchgrößen erstllt und dann wird das Netzt in einer for-schlefe mit jeder Minibatch-Größe erneut trainiert, ierbei wird verglichen welche Minibatch-Größe die geringste Trainingszeit besitzt.
+Es wird ein Array aus 5 verschiedenen Minibatchgrößen erstllt und dann wird das Netz in einer for-schlefe mit jeder Minibatch-Größe erneut trainiert, hierbei wird verglichen welche Minibatch-Größe die geringste Trainingszeit besitzt.
 
 \lstinputlisting{findmbatch.m}
 
 \section{Aufgabe 7}
 \subsection{Aufgabenstellung}
 Leiten Sie aus den Trainingsergebnissen Zusammenhänge zwischen den
-untersuchten Hyperparametern und der Trainingszeit sowie der erreich-
-ten Genauigkeit bei der Klassifizierung ab. Formulieren Sie hierfür eine
+untersuchten Hyperparametern und der Trainingszeit sowie der erreichten Genauigkeit bei der Klassifizierung ab. Formulieren Sie hierfür eine
 kurze Diskussion.
 \subsection{Lösung}
+Es hat sich eindeutig gezeigt, dass Adam ein genauerer Optimizer als SGDM ist.
+
+Die Lernrate scheint ebenfalls einen großen Einfluss auf die Genauigkeit des Netzes zu haben.
+Auch wenn sich die Genauigkeit beinahe durchgehend in einem Bereich größer 90 Prozent befindet lässt sich die Genauigkeit immernoch etwas verbessern durch das durchprobieren verschiedener Lernraten.
+Hierbei wurden die Lernraten jeweils um den Faktor 10 verändert.\\
+
+Testweise haben wir in einem großem Durchlauf einmal den Lernratenarray so angepasst das wir ca 50 verschiedene Lernraten getestet haben.\\
+Hierfür muss lediglich der lernratenarray angepaßt werden, das Skript findet selbstständig die ideale Lernrate.
+Zu Beachten ist allerdings, dass hier für eine sehr lange Laufzeit eingeplant werden muss.\\
+
+Wir haben hierfür einmal das Skript über ein Wochenende laufen lassen.
+
+Eine geschickte Anpassung der Minibatch-Größen würde die Trainings-Dauer und somit Gesamtlaufzeit verringern.
+
+Die Ergebnisse haben gezeigt, dass Änderungen der Minibatch-Größe einen direkten Einfluss auf die Laufzeit hat.\\
+Beim Testen hat sich gezeigt, dass für verschiedene Minibatch-Größe unterschiedliche Genauigkeiten erreicht wurden.\\
+Das liegt allerdings mit hoher Wahrscheinlichkeit da dran, dass jede Prädiktion auf statistischen Größen basiert.\\
+Wenn ein Neuronales Netz mehrfach mit exakt gleichen Parametern trainiert wird, ist es  unmöglich immer zu 100 Prozent das gleiche Ergebnis zu erhalten
 \end{document}
