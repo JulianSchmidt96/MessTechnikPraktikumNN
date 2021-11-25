@@ -72,7 +72,7 @@ if max(ac) > valacc
     [valacc,inlr] = max(ac);
 end
 end
-sprintf('%.15g  is the best accuracy and was achieved with the learning rate %.15g for the optimizer %s',val,lrs(:,in), opts{opt})
+sprintf('%.15g  is the best accuracy and was achieved with the learning rate %.15g for the optimizer %s',valacc,lrs(:,in), opts{opt})
 best_lr = lrs(:,inlr);
 
 
