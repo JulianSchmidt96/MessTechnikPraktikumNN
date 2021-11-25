@@ -37,7 +37,7 @@ start_lr = 10^-6;
 end_lr = 10^-1;
 
 lrs = multiplicatedarray(start_lr, end_lr, 10);
-epochs = 5;
+epochs = 10;
 
 val_freq = 30;
 
@@ -45,7 +45,7 @@ val_freq = 30;
 
 
 opts = {'adam','sgdm'};
-optimizier = opt(1);
+optimizier = opts{1};
 for opt =1:length(opts)
 
     ac = zeros(size(lrs));
@@ -64,9 +64,11 @@ for opt =1:length(opts)
         
         
     end
+
 valacc = 0;
+
 if max(ac) > valacc
-    optimizier = opts(opt)
+    optimizier = opts(opt);
     [valacc,inlr] = max(ac);
 end
 end
