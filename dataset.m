@@ -1,0 +1,6 @@
+digitDatasetPath = fullfile(matlabroot,'toolbox','nnet','nndemos', ...
+    'nndatasets','DigitDataset');
+fullDataset = imageDatastore(digitDatasetPath, ...
+    'IncludeSubfolders',true,'LabelSource','foldernames');
+numTrainFiles = 750;
+[TrainSet,ValidationSet] = splitEachLabel(fullDataset,numTrainFiles,'randomize');
