@@ -45,6 +45,7 @@ val_freq = 30;
 
 
 opts = {'adam','sgdm'};
+optimizier = opt(1);
 for opt =1:length(opts)
 
     ac = zeros(size(lrs));
@@ -63,10 +64,14 @@ for opt =1:length(opts)
         
         
     end
-
-[val,in] = max(ac);
+valacc = 0;
+if max(ac) > valacc
+    optimizier = opts(opt)
+    [valacc,inlr] = max(ac);
+end
+end
 sprintf('%.15g  is the best accuracy and was achieved with the learning rate %.15g for the optimizer %s',val,lrs(:,in), opts{opt})
-best_lr = lrs(:,in);
+best_lr = lrs(:,inlr);
 
 
 
@@ -75,7 +80,7 @@ best_lr = lrs(:,in);
 mean_val = zeros(size(mbatches));
 times = zeros(size(mbatches));
 for mb = 1:length(mbatches)
-    tic
+       
 modelOptions = trainingOptions(opts{:,opt}, ...
         'InitialLearnRate',lr, ...
         'MaxEpochs',epochs, ... 
@@ -90,12 +95,29 @@ modelOptions = trainingOptions(opts{:,opt}, ...
        % x(find(isnan(x)))=[];
         %mean_val(mb) = mean(x);
         times(mb) = time;
-    toc
+    
 end
 %[val,in] = max(mean_val);
-[val,in] =min(times);
-sprintf('%.15g  is the fastest training time eith a minibatchsize of  minibatchsize = %.15g with the learning rate %.15g and the optimizer %s',val,mbatches(in), best_lr, opts{opt})
-end
+[valtime,inmb] =min(times);
+sprintf('%.15g seconds is the fastest training time with a minibatchsize of  minibatchsize = %.15g with the learning rate %.15g and the optimizer %s',val,mbatches(in), best_lr, opts{opt})
+
+
+
+
+%% train again with best hyperparams
+
+epochs = 100
+
+modelOptions = trainingOptions(opts{:,opt}, ...
+        'InitialLearnRate',lrs(inlr), ...
+        'MaxEpochs',epochs, ... 
+        'ValidationData',ValidationSet, ...
+        'ValidationFrequency',val_freq, ...
+        'MiniBatchSize',mbatches(mbatches(inmb)), ...
+        'Verbose',false, ...
+        'Plots','training-progress');
+    
+[net, results] = trainNetwork(TrainSet,NN_layers,modelOptions);
 
 %% 
 
