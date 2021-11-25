@@ -13,7 +13,7 @@ numTrainFiles = 750;
 
 
 
-NN_layers = [
+NN_layer = [
     imageInputLayer([28 28 1],'Normalization','none','Name','input')
     
     fullyConnectedLayer(1000, 'Name','fullyConnected1')
@@ -56,7 +56,7 @@ for opt =1:length(opts)
         'ValidationData',ValidationSet, ...
         'ValidationFrequency',val_freq, ...
         'Verbose',false);
-        [net, results] = trainNetwork(TrainSet,NN_layers,modelOptions);
+        [net, results] = trainNetwork(TrainSet,NN_layer,modelOptions);
     
         
         x = results.FinalValidationAccuracy;
@@ -72,7 +72,7 @@ if max(ac) > valacc
     [valacc,inlr] = max(ac);
 end
 end
-sprintf('%.15g  is the best accuracy and was achieved with the learning rate %.15g for the optimizer %s',valacc,lrs(:,in), opts{opt})
+sprintf('%.15g  is the best accuracy and was achieved with the learning rate %.15g for the optimizer %s',valacc,lrs(:,inlr), opts{opt})
 best_lr = lrs(:,inlr);
 
 
@@ -90,8 +90,8 @@ modelOptions = trainingOptions(opts{:,opt}, ...
         'ValidationFrequency',val_freq, ...
         'MiniBatchSize',mbatches(mb), ...
         'Verbose',false);
-        %[net, results] = trainNetwork(TrainSet,NN_layers,modelOptions);
-        f = @() trainNetwork(TrainSet,NN_layers,modelOptions);
+        %[net, results] = trainNetwork(TrainSet,NN_layer,modelOptions);
+        f = @() trainNetwork(TrainSet,NN_layer,modelOptions);
         time = timeit(f);
         %x = results.ValidationAccuracy;
        % x(find(isnan(x)))=[];
@@ -101,7 +101,7 @@ modelOptions = trainingOptions(opts{:,opt}, ...
 end
 %[val,in] = max(mean_val);
 [valtime,inmb] =min(times);
-sprintf('%.15g seconds is the fastest training time with a minibatchsize of  minibatchsize = %.15g with the learning rate %.15g and the optimizer %s',val,mbatches(in), best_lr, opts{opt})
+sprintf('%.15g seconds is the fastest training time with a minibatchsize of  minibatchsize = %.15g with the learning rate %.15g and the optimizer %s',valtime,mbatches(inmb), best_lr, opts{opt})
 
 
 
@@ -119,7 +119,7 @@ modelOptions = trainingOptions(opts{:,opt}, ...
         'Verbose',false, ...
         'Plots','training-progress');
     
-[net, results] = trainNetwork(TrainSet,NN_layers,modelOptions);
+[net, results] = trainNetwork(TrainSet,NN_layer,modelOptions);
 
 %% 
 
