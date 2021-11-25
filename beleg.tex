@@ -23,7 +23,6 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
-
 \title{Neuronale Netze in der Bildverarbeitung Versuch-1}
 \author{Julian Schmidt, Vincenz Forkel}
 
@@ -90,4 +89,72 @@ zu prüfen. Legen Sie dann die Hyperparameter für das Training fest.
 \subsection{Lösung}
 \\
 Prinzipiell geh es hier bei um die Netzwerkarchitektur, welche bereits in Abschnitt 2 erläutert.
+
+\\
+\section{Aufgabe 3}
+\\
+\subsection{Aufgabenstellung}
+Trainieren Sie das neuronale Netz mit der Funktion trainNetwork oder
+mit einer eigenen Trainingsschleife. Es ist wünschenswert, wenn Sie
+beide Varianten ausprobieren. Bei korrekter Implementierung werden
+beide Wege funktionieren und zu vergleichbaren Ergebnissen führen.
+Jedoch können Sie bei der erfolgreichen Implementierung einer benutzerdefinierten Trainingsschleife ein umfangreiches Verständnis zum
+Training Neuronaler Netze gewinnen. Nutzen Sie zunächst für beide
+Optionen den Solver adam und evaluieren Sie das Ergebnis, indem Sie
+das Netz anhand der Validierungsdaten testen. Mit geeigneten Parametern sollte es möglich sein, eine Genauigkeit von mindestens 95 %
+zu erreichen.\\
+\subsection{Lösung}
+\\
+Hierfür werden relevante Trainingsoptionen in der Variable 'modelOptions zwischengespeichert.
+\\
+\lstinputlisting{options.m}
+\\
+Mit dem Optimizer Adam lies sich bei einer Trainingsdauer von 30 Epochen eine finale Validierungsgenauigkeit von ca. 98 Prozent erreichen.
+\\
+\section{Aufgabe 4}
+\\
+\subsection{Aufgabenstellung}
+\\Ermitteln Sie die mittlere Klassifizierungsgenauigkeit des NN in Ab-
+hängigkeit der eingelesenen Ziffern.
+
+Stellen Sie das Ergebnis in einem geeigneten Diagramm (µ = f (Ziffer))
+dar
+\subsection{Lösung}
+\section{Aufgabe 5}
+\\
+\subsection{Aufgabenstellung}
+\\
+Vergleichen Sie nun die beiden Solver adam und sgdm mit mindestens 6
+verschiedenen Lernraten zwischen 10−6 und 10−1 . Stellen Sie die er-
+reichte mittlere Klassifizierungsgenauigkeit in Abhängigkeit von der
+Lernrate dar und verwenden Sie für die Lernrate eine logarithmische
+Achse.
+\\
+\subsection{Lösung}
+in zwei for-schleifen werden beide optimizier mit den verschiedenen Lernraten und sonst gleichen parametern getestet und es werden Lernrate+Optimizer mit der höchsten finalen Genauigkeit übernommen.
+\lstinputlisting{findlr.m}
+
+
+\Aufgabe{6}
+\subsection{Aufgabenstellung}
+Testen Sie außerdem mindestens 5 verschiedene Größen des Mini-Batch
+zwischen 16 und 256. Wählen Sie aus der vorherigen Aufgabe eine Lern-
+rate aus, bei der der Trainingsprozess zu einer hohen Klassifizierungs-
+genauigkeit konvergiert. Stellen Sie die mittlere Klassifizierungsgenau-
+igkeit und die benötigte Trainingszeit in Abhängigkeit von der Größe
+des Mini-Batches dar.
+\\
+
+\subsection{Lösung}
+Es wird ein Array aus 5 verschiedenen Minibatchgrößen erstllt und dann wird das Netzt in einer for-schlefe mit jeder Minibatch-Größe erneut trainiert, ierbei wird verglichen welche Minibatch-Größe die geringste Trainingszeit besitzt.
+
+\lstinputlisting{findmbatch.m}
+
+\section{Aufgabe 7}
+\subsection{Aufgabenstellung}
+Leiten Sie aus den Trainingsergebnissen Zusammenhänge zwischen den
+untersuchten Hyperparametern und der Trainingszeit sowie der erreich-
+ten Genauigkeit bei der Klassifizierung ab. Formulieren Sie hierfür eine
+kurze Diskussion.
+\subsection{Lösung}
 \end{document}
