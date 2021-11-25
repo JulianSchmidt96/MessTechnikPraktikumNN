@@ -1,4 +1,4 @@
 
 
 ## todo:
- time evaluation function for mini batch evaluation for loop
+Aufgabe 4 und Aufgabe 7
