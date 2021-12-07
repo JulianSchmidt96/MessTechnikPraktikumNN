@@ -8,33 +8,21 @@ r = size(XTrain,1);                 % Auflösung Trainingsbilder=[r,r]
 XTrain_aug = zeros(r,r,1,2*N);
 YTrain_aug = zeros(r,r,1,2*N);
 
-% %%
-% I_px = size(XTrain,1)
-% imagesize = [I_px I_px 1]
-% imageAugmenter = imageDataAugmenter( ...
-%     'RandRotation',[0 360]);
-% 
-% auimds = augmentedImageDatastore(imagesize,XTrain,YTrain,"DataAugmentation",imageAugmenter)
-
-%%
-tform = randomAffine2d('Rotation',[-45 45]);
-% imAugmented = imwarp(imOriginal,tform,'OutputView',outputView);  
-
 %% Data Augmentation (2 neue Bilder pro Trainingsbild)
 for i1=1:N
     original_image = XTrain(:,:,:,i1);
     
-   % Data Augmentation 1
-     aug_image =imwarp(original_image,tform);  
+    % Data Augmentation 1
+    % aug_image = function(original_image); 
     
     [XTrain_aug(:,:,:,i1), YTrain_aug(:,:,:,i1)] = mmf(aug_image,r,M_T,modes_n);
     
     % Data Augmentation 2
     % aug_image = function(original_image);
     
-   %[XTrain_aug(:,:,:,N+i1), YTrain_aug(:,:,:,N+i1)] = mmf(aug_image,r,M_T,modes_n);
+    [XTrain_aug(:,:,:,N+i1), YTrain_aug(:,:,:,N+i1)] = mmf(aug_image,r,M_T,modes_n);
     
-   % disp([num2str(i1) '/' num2str(N)]);
+    disp([num2str(i1) '/' num2str(N)]);
 end
 
 %% Save Augmented Training Data
