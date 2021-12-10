@@ -10,27 +10,34 @@ close all
 %% Load training data
 % load file "DATA_MMF_16.mat"
 
-%data = load("DATA_MMF_16.mat");
+data_old = load("DATA_MMF_16.mat");
 %augmeneted dataset :\
-data = load("DATA_MMF_16_aug_2.mat");
+data_aug = load("DATA_MMF_16_aug_2.mat");
 
 
-x_train  =data.XTrain;
-y_train = data.YTrain;
+x_train_old = data_old.XTrain;
+y_train_old = data_old.YTrain;
+
+x_val_old = data_old.XValid;
+y_val_old = data_old.YValid;
+
+x_train_aug = data_aug.XTrain;
+y_train_aug = data_aug.YTrain;
+
+x_val_aug = data_aug.XValid;
+y_val_aug = data_aug.YValid;
 
 
-x_test  =data.XTest;
-y_test = data.YTest;
+x_test = data_old.XTest;
+y_test = data_old.YTest;
 
 
-x_val  =data.XValid;
-y_val = data.YValid;
 
 
 %% Create Neural Network Layergraph MLP
 
-I_px = size(x_train,1);
-O_px = size(y_train,1);
+I_px = size(x_train_old,1);
+O_px = size(y_train_old,1);
 
 layers = [imageInputLayer([I_px I_px 1],"Name","Input")
     
@@ -58,10 +65,10 @@ validationFrequency = 5;%floor(numel(y_train)/miniBatchSize);
 lr = 0.0001;
 %lrdropfactor = 0.000001;
 lrdropperiod = 10;
-epochs = 200;
+epochs = 10;
 
 
-%%
+%% old data
 
 
 options = trainingOptions('adam', ...
@@ -69,31 +76,39 @@ options = trainingOptions('adam', ...
     'MaxEpochs',epochs, ...
     'InitialLearnRate',lr, ...
     'Shuffle','every-epoch', ...
-    'ValidationData',{x_val,y_val}, ...
+    'ValidationData',{x_val_old,y_val_old}, ...
     'ValidationFrequency',validationFrequency, ...
     'Verbose',false);
+[net_old_data, history_old_data] = trainNetwork(x_train_old,y_train_old,layers,options);
+save net_old_data;
+save history_old_data;
 
+%% aug data
+options = trainingOptions('adam', ...
+    'MiniBatchSize',miniBatchSize, ...
+    'MaxEpochs',epochs, ...
+    'InitialLearnRate',lr, ...
+    'Shuffle','every-epoch', ...
+    'ValidationData',{x_val_aug,y_val_aug}, ...
+    'ValidationFrequency',validationFrequency, ...
+    'Verbose',false);
+[net_aug_data, history_aug_data] = trainNetwork(x_train_aug,y_train_aug,layers,options);
+save net_aug_data;
+save history_aug_data;
 
-%%
-[net, history] = trainNetwork(x_train,y_train,layers,options);
-save net;
-save history;
-%%
-valloss = history.ValidationLoss;
-valloss(find(isnan(valloss)))=[];
-
-trainloss = history.TrainingLoss;
-trainloss(find(isnan(trainloss)))=[];
-
-%%
-plot(valloss(5:end))
 
 %% Calculate Prediction 
 % use command "predict"
-
+y_test_old = predict(net_old_data, x_test);
+y_test_aug = predict(net_aug_data, x_test);
 %% Evaluate Network
 % calculate RMSE, Correlation, SSIM, PSNR
-
+RMSE_old = sqrt(mean((y_test_old-y_test).^2));
+RMSE_aug = sqrt(mean((y_test_aug-y_test).^2));
+boxplot(RMSE_old(4))
+hold on
+boxplot(RMSE_aug(4))
+% [ssim_old,a] = ssim(y_test_old, y_test);
 %% Boxplots f�r Aufgabe 6
 
 %% Ab Aufgabe 7: create Neural Network Layergraph U-Net
