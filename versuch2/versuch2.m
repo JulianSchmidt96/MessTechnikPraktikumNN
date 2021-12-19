@@ -101,6 +101,8 @@ save history_aug_data;
 % use command "predict"
 y_test_old = predict(net_old_data, x_test);
 y_test_aug = predict(net_aug_data, x_test);
+save y_test_old;
+save y_test_aug;
 %% Evaluate Network
 % calculate RMSE, Correlation, SSIM, PSNR
 RMSE_old = sqrt(mean((y_test_old-y_test).^2));
@@ -108,14 +110,9 @@ RMSE_aug = sqrt(mean((y_test_aug-y_test).^2));
 boxplot(RMSE_old(4))
 hold on
 boxplot(RMSE_aug(4))
-% [ssim_old,a] = ssim(y_test_old, y_test);
 
-
-ref = imshow(y_test(:,:,:,1));
-A = imshow(y_test_old(:,:,:,1));
-ssim = ssim(A,ref);
-
-
+save RMSE_old;
+save RMSE_aug;
 %% 
 ssims_old = [];
 ssims_aug = [];
@@ -127,11 +124,16 @@ for i=1:size(y_test,4)
     ssims_old(i) = ssim(imread('predold.jpg'),imread('ref.jpg'));
     ssims_aug(i) = ssim(imread('predaug.jpg'),imread('ref.jpg'));
 end
-
+save ssims_old;
+save ssims_aug;
 %%
 xcorr_old = xcorr(y_test_old);
 xcorr_aug = xcorr(y_test_aug);
-xcorr_test = xcorr(y_test)
+xcorr_test = xcorr(y_test);
+
+save xcorr_old;
+save xcorr_aug;
+save xcorr_test;
 %% Boxplots f�r Aufgabe 6
 
 %% Ab Aufgabe 7: create Neural Network Layergraph U-Net
