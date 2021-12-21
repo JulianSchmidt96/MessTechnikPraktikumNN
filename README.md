@@ -1,4 +1,5 @@
 
 
 ## todo:
-Aufgabe 4 und Aufgabe 7
+cross correlation array problem
+aufgabe 8
