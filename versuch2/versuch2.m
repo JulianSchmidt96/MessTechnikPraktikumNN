@@ -9,6 +9,8 @@ close all
 
 %% Load training data
 % load file "DATA_MMF_16.mat"
+%% Load training data
+% load file "DATA_MMF_16.mat"
 data_old = load("DATA_MMF_16.mat");
 %augmeneted dataset :\
 data_aug = load("DATA_MMF_16_aug_2.mat");
@@ -31,7 +33,13 @@ y_test = data_old.YTest;
 
 
 
+%%
+%datasets = [data_old data_aug];
 
+%for d=1:2
+ %   x_train, x_test = datasets(d).XTrain, datasets(d).YTrain ;
+    
+%end
 %% Create Neural Network Layergraph MLP
 
 I_px = size(x_train_old,1);
@@ -68,6 +76,7 @@ epochs = 10;
 
 
 %% old data
+display('training with old data ..')
 options = trainingOptions('adam', ...
     'MiniBatchSize',miniBatchSize, ...
     'MaxEpochs',epochs, ...
@@ -80,7 +89,9 @@ options = trainingOptions('adam', ...
 save net_old_data;
 save history_old_data;
 
+display('saved training history')
 %% aug data
+display('training with augmented data ..')
 options = trainingOptions('adam', ...
     'MiniBatchSize',miniBatchSize, ...
     'MaxEpochs',epochs, ...
@@ -93,53 +104,79 @@ options = trainingOptions('adam', ...
 save net_aug_data;
 save history_aug_data;
 
-
+display('saved training history')
 %% Calculate Prediction 
 % use command "predict"
+
+display('prediciting values ..')
 y_test_old = predict(net_old_data, x_test);
 y_test_aug = predict(net_aug_data, x_test);
 save y_test_old;
 save y_test_aug;
-
+display('saved predicted data')
 %% Evaluate Network
 % calculate RMSE, Correlation, SSIM, PSNR
+display('calulating RMSEs ..')
+
 RMSE_old = sqrt(mean((y_test_old-y_test).^2));
 RMSE_aug = sqrt(mean((y_test_aug-y_test).^2));
-boxplot(RMSE_old(4))
-hold on
-boxplot(RMSE_aug(4))
 
 save RMSE_old;
 save RMSE_aug;
+display('saved RMSEs')
 %% 
-ssims_old = [];
-ssims_aug = [];
+%display('calculating SSIMs ..')
+%ssims_old = [];
+%ssims_aug = [];
+%for i=1:size(y_test,4)
+%    imwrite(y_test(:,:,:,i),'ref.jpg');
+%    imwrite(y_test_old(:,:,:,i),'predold.jpg');
+%    imwrite(y_test_aug(:,:,:,i),'predaug.jpg');
+%
+%    ssims_old(i) = ssim(imread('predold.jpg'),imread('ref.jpg'));
+%    ssims_aug(i) = ssim(imread('predaug.jpg'),imread('ref.jpg'));
+%end
+%save ssims_old;
+%save ssims_aug;
+
+display('saved SSIMs')
+%% correlation ceoff
+
+display('calculating corellation coeff ..')
+
+
+corr_old = zeros(size(y_test,4),1);
+corr_aug = [];
+
+
+
 for i=1:size(y_test,4)
-    imwrite(y_test(:,:,:,i),'ref.jpg');
-    imwrite(y_test_old(:,:,:,i),'predold.jpg');
-    imwrite(y_test_aug(:,:,:,i),'predaug.jpg');
 
-    ssims_old(i) = ssim(imread('predold.jpg'),imread('ref.jpg'));
-    ssims_aug(i) = ssim(imread('predaug.jpg'),imread('ref.jpg'));
+    y_old = y_test_old(:,:,1,i);
+    y_aug = y_test_aug(:,:,1,i);
+    y_t = y_test(:,:,1,i);
+    coef_old = corrcoef(y_old(:),y_t(:));
+    coef_old = coef_old(1,2);
+    coef_aug = corrcoef(y_aug(:),y_t(:));
+    coef_aug = coef_aug(1,2);
+    corr_old(i) = coef_old;
+    corr_aug(i) = coef_aug;
+
+    
 end
-save ssims_old;
-save ssims_aug;
 
-%%
-xcorr_old = xcorr(y_test_old);
-save xcorr_old;
-xcorr_aug = xcorr(y_test_aug);
-save xcorr_aug;
-xcorr_test = xcorr(y_test);
-save xcorr_test;
 
+save corr_old;
+save corr_aug;
+
+display('saved corellation coeff')
 %% Boxplots f�r Aufgabe 6
 
 
 %% Ab Aufgabe 7: create Neural Network Layergraph U-Net
 % Layers = [];
 layers = unetLayers([I_px I_px 1],2,...
-'encoderDepth',3);
+'encoderDepth',3
 finalConvLayer = convolution2dLayer(1,1,...
 'Padding','same','Stride',1,'Name',...
 'Final_ConvolutionLayer');
@@ -149,4 +186,4 @@ layers = removeLayers(layers,'Softmax-Layer',...
 'Segmentation-Layer');
 
 
-%% Boxplots f�r Aufgabe 8
+
