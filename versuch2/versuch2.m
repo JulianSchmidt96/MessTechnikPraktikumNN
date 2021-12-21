@@ -10,13 +10,13 @@ close all
 %% Load training data
 % load file "DATA_MMF_16.mat"
 
-data_old = load("DATA_MMF_16.mat");
+data_old = load("data/DATA_MMF_16.mat");
 %augmeneted dataset :\
-data_aug = load("DATA_MMF_16_aug_2.mat");
+data_aug = load("data/DATA_MMF_16_aug_2.mat");
 
 
 x_train_old = data_old.XTrain;
-y_train_old = data_old.YTrain;
+y_train_old = data_old.YTrain; 
 
 x_val_old = data_old.XValid;
 y_val_old = data_old.YValid;
@@ -68,9 +68,8 @@ lrdropperiod = 10;
 epochs = 10;
 
 
+
 %% old data
-
-
 options = trainingOptions('adam', ...
     'MiniBatchSize',miniBatchSize, ...
     'MaxEpochs',epochs, ...
@@ -103,6 +102,7 @@ y_test_old = predict(net_old_data, x_test);
 y_test_aug = predict(net_aug_data, x_test);
 save y_test_old;
 save y_test_aug;
+
 %% Evaluate Network
 % calculate RMSE, Correlation, SSIM, PSNR
 RMSE_old = sqrt(mean((y_test_old-y_test).^2));
@@ -126,17 +126,31 @@ for i=1:size(y_test,4)
 end
 save ssims_old;
 save ssims_aug;
+
 %%
 xcorr_old = xcorr(y_test_old);
-xcorr_aug = xcorr(y_test_aug);
-xcorr_test = xcorr(y_test);
-
 save xcorr_old;
+xcorr_aug = xcorr(y_test_aug);
 save xcorr_aug;
+xcorr_test = xcorr(y_test);
 save xcorr_test;
+
 %% Boxplots f�r Aufgabe 6
+
 
 %% Ab Aufgabe 7: create Neural Network Layergraph U-Net
 % Layers = [];
-
+layers = unetLayers([I_px I_px 1],2,...
+'encoderDepth',3);
+finalConvLayer = convolutional2dLayer(1,1,...
+'Padding','same','Stride',1,'Name',...
+'Final-ConvolutionLayer');
+layers = replaceLayer(layers,...
+'Final-ConvolutionalLayer',finalConvLayer);
+layers = removeLayers(layers,'Softmax-Layer');
+regLayer = regressionLayer('Name','Reg-Layer');
+layers = replaceLayer(layers,...
+'Segmentation-Layer',regLayer);
+layers = connectLayers(layers,...
+'Final-ConvolutionLayer','Reg-Layer');
 %% Boxplots f�r Aufgabe 8
