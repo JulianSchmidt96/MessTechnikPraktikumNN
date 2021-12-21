@@ -89,7 +89,7 @@ options = trainingOptions('adam', ...
 save net_old_data;
 save history_old_data;
 
-display('saved training history')
+display('saved trainimreading history')
 %% aug data
 display('training with augmented data ..')
 options = trainingOptions('adam', ...
@@ -125,19 +125,24 @@ save RMSE_old;
 save RMSE_aug;
 display('saved RMSEs')
 %% 
-%display('calculating SSIMs ..')
-%ssims_old = [];
-%ssims_aug = [];
-%for i=1:size(y_test,4)
-%    imwrite(y_test(:,:,:,i),'ref.jpg');
-%    imwrite(y_test_old(:,:,:,i),'predold.jpg');
-%    imwrite(y_test_aug(:,:,:,i),'predaug.jpg');
-%
-%    ssims_old(i) = ssim(imread('predold.jpg'),imread('ref.jpg'));
-%    ssims_aug(i) = ssim(imread('predaug.jpg'),imread('ref.jpg'));
-%end
-%save ssims_old;
-%save ssims_aug;
+display('calculating SSIMs ..')
+ssims_old = zeros(size(y_test,4),1);
+ssims_aug = zeros(size(y_test,4),1);
+
+psnr_old = zeros(size(y_test,4),1);
+psnr_aug = zeros(size(y_test,4),1);
+for i=1:size(y_test,4)
+    imwrite(y_test(:,:,:,i),'ref.jpg');
+    imwrite(y_test_old(:,:,:,i),'predold.jpg');
+    imwrite(y_test_aug(:,:,:,i),'predaug.jpg');
+
+    ssims_old(i) = ssim(imread('predold.jpg'),imread('ref.jpg'));
+    ssims_aug(i) = ssim(imread('predaug.jpg'),imread('ref.jpg'));
+end
+save ssims_old;
+save ssims_aug;
+save psnr_old;
+save psnr_aug;
 
 display('saved SSIMs')
 %% correlation ceoff
@@ -146,7 +151,7 @@ display('calculating corellation coeff ..')
 
 
 corr_old = zeros(size(y_test,4),1);
-corr_aug = [];
+corr_aug = zeros(size(y_test,4),1);
 
 
 
@@ -175,15 +180,15 @@ display('saved corellation coeff')
 
 %% Ab Aufgabe 7: create Neural Network Layergraph U-Net
 % Layers = [];
-layers = unetLayers([I_px I_px 1],2,...
-'encoderDepth',3
-finalConvLayer = convolution2dLayer(1,1,...
-'Padding','same','Stride',1,'Name',...
-'Final_ConvolutionLayer');
-layers = replaceLayer(layers,...
-'Final_ConvolutionLayer',finalConvLayer);
-layers = removeLayers(layers,'Softmax-Layer',...
-'Segmentation-Layer');
 
 
 
+
+
+
+
+
+
+
+
+%% Boxplots f�r Aufgabe 8
