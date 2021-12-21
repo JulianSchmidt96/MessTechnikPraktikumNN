@@ -176,8 +176,25 @@ save corr_aug;
 
 display('saved corellation coeff')
 %% Boxplots f�r Aufgabe 6
+ ssims = [ssims_old, ssims_aug];
+ corrs = [corr_old, corr_aug];
+ psnrs =[psnr_old, psnr_aug];
+ 
+ boxplot(ssims); ylabel('SSIM');
+ legend('old data', 'augmented data');
+ saveas (gcf,'boxplotSSIM.jpg');
+ 
+ 
+  boxplot(corrs); yl<abel('CORR');
+ legend('old data', 'augmented data');
+ saveas (gcf,'boxplotCORR.jpg');
+ 
 
-
+ 
+ 
+  boxplot(psnrs); ylabel('PSNR');
+ legend('old data', 'augmented data');
+ saveas (gcf,'boxplotPSNR.jpg');
 %% Ab Aufgabe 7: create Neural Network Layergraph U-Net
 % Layers = [];
 
