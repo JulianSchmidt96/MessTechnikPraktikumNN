@@ -9,11 +9,9 @@ close all
 
 %% Load training data
 % load file "DATA_MMF_16.mat"
-
-data_old = load("data/DATA_MMF_16.mat");
+data_old = load("DATA_MMF_16.mat");
 %augmeneted dataset :\
-data_aug = load("data/DATA_MMF_16_aug_2.mat");
-
+data_aug = load("DATA_MMF_16_aug_2.mat");
 
 x_train_old = data_old.XTrain;
 y_train_old = data_old.YTrain; 
@@ -142,15 +140,13 @@ save xcorr_test;
 % Layers = [];
 layers = unetLayers([I_px I_px 1],2,...
 'encoderDepth',3);
-finalConvLayer = convolutional2dLayer(1,1,...
+finalConvLayer = convolution2dLayer(1,1,...
 'Padding','same','Stride',1,'Name',...
-'Final-ConvolutionLayer');
+'Final_ConvolutionLayer');
 layers = replaceLayer(layers,...
-'Final-ConvolutionalLayer',finalConvLayer);
-layers = removeLayers(layers,'Softmax-Layer');
-regLayer = regressionLayer('Name','Reg-Layer');
-layers = replaceLayer(layers,...
-'Segmentation-Layer',regLayer);
-layers = connectLayers(layers,...
-'Final-ConvolutionLayer','Reg-Layer');
+'Final_ConvolutionLayer',finalConvLayer);
+layers = removeLayers(layers,'Softmax-Layer',...
+'Segmentation-Layer');
+
+
 %% Boxplots f�r Aufgabe 8
