@@ -231,7 +231,13 @@ unet_layers = replaceLayer(unet_layers,...
 unet_layers = connectLayers(unet_layers,...
 "Final-ConvolutionLayer","Reg-Layer");
 
+display('train unet ..')
 
+[unet, history_unet] =  trainNetwork(x_train_aug,y_train_aug,unet_layers,options);
+
+save unet;
+save history_unet;
+
+
+display('finished unet training')
 %% Boxplots f�r Aufgabe 8
-
-
