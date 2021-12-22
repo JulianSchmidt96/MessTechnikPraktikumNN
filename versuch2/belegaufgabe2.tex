@@ -52,7 +52,7 @@ Im Verlauf des Versuches werden Probleme wie Overfitting oder zu kleine Datensä
 
 Zunächst wird ein Multi-Layer-Perceptron der folgenden Architektur:\\
 
-\includegraphics[scale=0.3]{layers.jpg}
+\includegraphics[scale=0.2]{layers.jpg}
 
 \\
 
@@ -63,7 +63,7 @@ Hier werden die gegebenen Daten augmentiert.\\
 Es kann Beispielsweise ein Bild leicht rotiert werden und dadurch steht ein neues Bild zur Verfügung.
 Mit diesem Prinzip kann der Datensatz schnell um ein vielfaches erweitert werden.\\
 Um zu untersuchen ob der erweiterte Datesatz für bessere Ergebnisse sorgt, wirds das Nets erneut trainiert, allerdings dieses mal mit dem erweitertem Datensatz.\\
-Erstellt wird der Augmentierte Datensatz in dem Script 
+Erstellt wird der Augmentierte Datensatz in dem Script create_augmented_data.m
 
 \newpage
 \subsection{Ergebnisse beider Datensätze}
@@ -93,10 +93,29 @@ Da durch den augmentierten Datensatz noch keine deutliche Verbesserung erkennbar
 Es wird das UNET verwendet.\\
 Hier wird der finale convolutional Layer angepaßt.\\
 Die Architektur des Netzes sieht wie folgt aus:\\
-\includegraphics[scale=0.3]{unetlayers.jpg}
+\includegraphics[scale=0.2]{unetlayers.jpg}
+
 \subsection{Auswertung unet}
 Nachdem das Unet mit dem augmentiertem Datensatz trainiert wurde wird es mit dem MLP, welches ebenfalls mit dem augmentiertem Datensatz trainiert wurde verglichen.\\
 Hierzu wurden erneut die Güte Kriterien RMSE, SSIM, PSNR und Korrelationskoeffizient verwendet.\\
-Es ist zuvor noch zu erwähnen, dass das unet eine deutlich höhere Zeit für das Training beansprucht, als das MLP.\\
+Es ist zuvor noch zu erwähnen, dass das unet eine deutlich höhere Zeit für das Training beansprucht, als das MLP.
+Zunächst wird wieder der RMSE inspiziert.\\
+\includegraphics[scale=0.2]{boxplotUnetRMSE.jpg}
+
+
+Hier zeigt sich erneut ein annährend gleiches Verhalten, der einige Unterschied ist, dass die RMSE Streuung beim unet etwas stärker ist.\\
+\newpage
+Um einen besseren Vergleich zu bekommen wird das SSIM ebefalls analysiert.\\
+
+\includegraphics[scale=0.2]{boxplotUnetSSIM.jpg}
+
+Anders als beim Vergleich beider MLPs ist dieses mal ein deutlicher Unterschied zu erkennen.
+Ins Auge sticht sofort, dass der SSIM Maximalwert deutlich geringer beim unet, als beim MLP, ist.\\
+Dazu ist der Interquartilsabstand ebnfalls deutlich geringer, der Median ist etwas, aber nicht deutlich, höher als beim MLP.\\
+
+Ein annährend gleiches Verhalten ist beim PSNR zu erkennen.\\
+
+\includegraphics[scale=0.2]{boxplotUnetPSNR.jpg}
+
 
 \end{document}
