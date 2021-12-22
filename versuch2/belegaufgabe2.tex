@@ -115,7 +115,18 @@ Dazu ist der Interquartilsabstand ebnfalls deutlich geringer, der Median ist etw
 
 Ein annährend gleiches Verhalten ist beim PSNR zu erkennen.\\
 
-\includegraphics[scale=0.2]{boxplotUnetPSNR.jpg}
+\includegraphics[scale=0.2]{boxplotUnetPSNR.jpg}\\
+Der Korrelationskoeefizient hingegen verhält sich bei beiden Netzen fast gleich.\\
+\includegraphics[scale=0.2]{boxplotUnetCORR.jpg}
 
 
+\section{Trainingsverhalten}
+
+Beim Hyperparameter-tuning der MLPS, hat sich gezeigt, dass der validation loss nach 10 Epochen leicht zu steigen beginnt, deshalb werden alle Netze mit 10 Epochen trainiert.\\
+Es ist ebenfalls möglich über mehr Epochen zu trainieren und die validation patience entsprechend anzupaßen.\\
+Wir konnten hiermit keinen deutlichen Perfomance Unterschied erkennen hätten uns aber etwas Zeit ersparrt, wenn wir die validation patience von Anfang an verwendet hätten, anstatt die ideale Epochen zahl von Hand zu bestimmen.\\
+Die validation patience ist ein automatisierter Prozess und somit weniger Fehler anfällig, als manuelles Einstellen.\\
+
+Abschließend ist zu sagen, dass das unet eine etwas höhere Genauigkeit erzielt, allerdings eine deutlich höhere Trainingszeit beansprucht und auch deutlich größere Rechenleistung benötigt.\\
+Mit einer Leistungsfähigen GPU ist der Unterschied vermutlich deutlich geringer.\\
 \end{document}
