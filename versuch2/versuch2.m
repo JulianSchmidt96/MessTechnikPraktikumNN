@@ -125,7 +125,7 @@ save RMSE_old;
 save RMSE_aug;
 display('saved RMSEs')
 %% 
-display('calculating SSIMs ..')
+display('calculating SSIMs ans PSNRs ..')
 ssims_old = zeros(size(y_test,4),1);
 ssims_aug = zeros(size(y_test,4),1);
 
@@ -135,10 +135,18 @@ for i=1:size(y_test,4)
     imwrite(y_test(:,:,:,i),'ref.jpg');
     imwrite(y_test_old(:,:,:,i),'predold.jpg');
     imwrite(y_test_aug(:,:,:,i),'predaug.jpg');
-
-    ssims_old(i) = ssim(imread('predold.jpg'),imread('ref.jpg'));
-    ssims_aug(i) = ssim(imread('predaug.jpg'),imread('ref.jpg'));
+    pic_old = imread('predold.jpg');
+    pic_ref = imread('ref.jpg');
+    pic_aug = imread('predaug.jpg');
+    
+    ssims_old(i) = ssim(pic_old,pic_ref);
+    ssims_aug(i) = ssim(pic_aug,pic_ref);
+    
+    psnr_old(i) = psnr(pic_old, pic_ref);
+    psnr_aug(i) = psnr(pic_aug, pic_ref);
+    
 end
+
 save ssims_old;
 save ssims_aug;
 save psnr_old;
@@ -182,19 +190,20 @@ display('saved corellation coeff')
  
  boxplot(ssims); ylabel('SSIM');
  legend('old data', 'augmented data');
- saveas (gcf,'boxplotSSIM.jpg');
+ saveas (gcf,'boxplotSSIM.jpg')
  
  
-  boxplot(corrs); yl<abel('CORR');
+ boxplot(corrs); ylabel('CORR');
  legend('old data', 'augmented data');
- saveas (gcf,'boxplotCORR.jpg');
+ saveas (gcf,'boxplotCORR.jpg')
  
 
  
  
-  boxplot(psnrs); ylabel('PSNR');
+ boxplot(psnrs); ylabel('PSNR');
  legend('old data', 'augmented data');
- saveas (gcf,'boxplotPSNR.jpg');
+ saveas (gcf,'boxplotPSNR.jpg')
+ 
 %% Ab Aufgabe 7: create Neural Network Layergraph U-Net
 % Layers = [];
 
@@ -203,9 +212,24 @@ display('saved corellation coeff')
 
 
 
+unet_layers = unetLayers([I_px I_px 1],2,...
+"encoderDepth",3);
+
+finalConvLayer = convolution2dLayer(1,1,"Padding","same","Stride",1,"Name","Final-ConvolutionLayer");
 
 
+unet_layers = replaceLayer(unet_layers,...
+"Final-ConvolutionLayer",finalConvLayer);
 
+unet_layers = removeLayers(unet_layers,"Softmax-Layer");
+
+regLayer = regressionLayer("Name","Reg-Layer");
+
+unet_layers = replaceLayer(unet_layers,...
+"Segmentation-Layer",regLayer);
+
+unet_layers = connectLayers(unet_layers,...
+"Final-ConvolutionLayer","Reg-Layer");
 
 
 %% Boxplots f�r Aufgabe 8
