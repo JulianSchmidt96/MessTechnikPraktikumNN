@@ -180,11 +180,11 @@ for i=1:size(y_test,4)
     
     
     
-    RMSE_old =  sqrt(mean((y_old-y_t).^2));
-    RMSE_aug = sqrt(mean((y_aug-y_t).^2));
+    RMSE_old =  sqrt(mean((y_old(:)-y_t(:)).^2));
+    RMSE_aug = sqrt(mean((y_aug(:)-y_t(:)).^2));
 
-    RMSEs_old(i) = RMSE_old
-    RMSES_aug(i) = RMSE_aug 
+    RMSEs_old(i) = RMSE_old;
+    RMSES_aug(i) = RMSE_aug ;
    
     
 end
@@ -195,26 +195,34 @@ save corr_aug;
 save RMSEs_old;
 save RMSEs_aug;
 
-display('saved corellation coeff')
+display('saved criteria')
 %% Boxplots f�r Aufgabe 6
  ssims = [ssims_old, ssims_aug];
  corrs = [corr_old, corr_aug];
  psnrs =[psnr_old, psnr_aug];
+ rmses = [RMSEs_old, RMSEs_aug];
  
- boxplot(ssims); ylabel('SSIM');
- legend('old data', 'augmented data');
+ 
+ 
+ boxplot(ssims, 'label',{' old dataset',' augmented data'}); ylabel('SSIM');
+ 
  saveas (gcf,'boxplotSSIM.jpg')
  
  
- boxplot(corrs); ylabel('CORR');
- legend('old data', 'augmented data');
+ boxplot(rmses, 'label',{' old dataset',' augmented data'}); ylabel('SSIM');
+ 
+ saveas (gcf,'boxplotRMSE.jpg')
+ 
+ 
+ boxplot(corrs,  'label',{' old dataset',' augmented data'}); ylabel('CORR');
+ 
  saveas (gcf,'boxplotCORR.jpg')
  
 
  
+
+ boxplot(psnrs,  'label',{' old dataset',' augmented data'}); ylabel('PSNR');
  
- boxplot(psnrs); ylabel('PSNR');
- legend('old data', 'augmented data');c
  saveas (gcf,'boxplotPSNR.jpg')
  
 %% Ab Aufgabe 7: create Neural Network Layergraph U-Net
@@ -295,23 +303,23 @@ save RMSEs_u;
 
 % ssimss boxplot
 
-boxplot([RMSE_aug RMSEs_u]); ylabel('RMSE');
-legend('MLP','unet');
+boxplot([RMSE_aug RMSEs_u],'labels',{'MLP','unet'}); ylabel('RMSE');
+
 saveas (gcf,'boxplotUnetRMSE.jpg');
 
 
 
-boxplot([ssims_aug ssims_u]); ylabel('SSIM');
+boxplot([ssims_aug ssims_u],'labels',{'MLP','unet'}); ylabel('SSIM');
 legend('MLP','unet');
 saveas (gcf,'boxplotUnetSSIM.jpg');
 
 
-boxplot([psnr_aug psnr_u]); ylabel('PSNR');
+boxplot([psnr_aug psnr_u],'labels',{'MLP','unet'}); ylabel('PSNR');
 
 legend('MLP','unet');
 saveas (gcf,'boxplotUnetPSNR.jpg');
 
-boxplot([corr_aug corr_u]); ylabel('CORR');
+boxplot([corr_aug corr_u],'labels',{'MLP','unet'}); ylabel('CORR');
 
 legend('MLP','unet');
 saveas (gcf,'boxplotUnetCORR.jpg');
