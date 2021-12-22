@@ -116,14 +116,7 @@ save y_test_aug;
 display('saved predicted data')
 %% Evaluate Network
 % calculate RMSE, Correlation, SSIM, PSNR
-display('calulating RMSEs ..')
 
-RMSE_old = sqrt(mean((y_test_old-y_test).^2));
-RMSE_aug = sqrt(mean((y_test_aug-y_test).^2));
-
-save RMSE_old;
-save RMSE_aug;
-display('saved RMSEs')
 %% 
 display('calculating SSIMs ans PSNRs ..')
 ssims_old = zeros(size(y_test,4),1);
@@ -131,6 +124,12 @@ ssims_aug = zeros(size(y_test,4),1);
 
 psnr_old = zeros(size(y_test,4),1);
 psnr_aug = zeros(size(y_test,4),1);
+
+
+
+RMSEs_old =  zeros(size(y_test,4),1);
+RMSEs_aug =  zeros(size(y_test,4),1);
+
 for i=1:size(y_test,4)
     imwrite(y_test(:,:,:,i),'ref.jpg');
     imwrite(y_test_old(:,:,:,i),'predold.jpg');
@@ -163,6 +162,10 @@ corr_aug = zeros(size(y_test,4),1);
 
 
 
+RMSEs_old =  zeros(size(y_test,4),1);
+RMSEs_aug =  zeros(size(y_test,4),1);
+
+
 for i=1:size(y_test,4)
 
     y_old = y_test_old(:,:,1,i);
@@ -174,13 +177,23 @@ for i=1:size(y_test,4)
     coef_aug = coef_aug(1,2);
     corr_old(i) = coef_old;
     corr_aug(i) = coef_aug;
+    
+    
+    
+    RMSE_old =  sqrt(mean((y_old-y_t).^2));
+    RMSE_aug = sqrt(mean((y_aug-y_t).^2));
 
+    RMSEs_old(i) = RMSE_old
+    RMSES_aug(i) = RMSE_aug 
+   
     
 end
 
 
 save corr_old;
 save corr_aug;
+save RMSEs_old;
+save RMSEs_aug;
 
 display('saved corellation coeff')
 %% Boxplots f�r Aufgabe 6
@@ -201,7 +214,7 @@ display('saved corellation coeff')
  
  
  boxplot(psnrs); ylabel('PSNR');
- legend('old data', 'augmented data');
+ legend('old data', 'augmented data');c
  saveas (gcf,'boxplotPSNR.jpg')
  
 %% Ab Aufgabe 7: create Neural Network Layergraph U-Net
@@ -248,6 +261,7 @@ y_unet = predict(unet, x_test);
 ssims_u = zeros(size(y_test,4),1);
 corr_u = zeros(size(y_test,4),1);
 psnr_u = zeros(size(y_test,4),1);
+RMSEs_u = zeros(size(y_test,4),1);
 for i=1:size(y_test,4)
     imwrite(y_test(:,:,:,i),'ref.jpg');
     imwrite(y_unet(:,:,:,i),'unet.jpg');
@@ -264,7 +278,9 @@ for i=1:size(y_test,4)
     y_t = y_test(:,:,1,i);
     coef_u = corrcoef(y_u(:),y_t(:));
     
-    corr_u(i) = coef_u;
+    corr_u(i) = coef_u(1,2);
+    
+    RMSEs_u =  sqrt(mean((y_u-y_t).^2));
     
 end
 
@@ -272,27 +288,30 @@ save y_unet;
 save corr_u;
 save psnr_u;
 save ssims_u;
+save RMSEs_u;
     
 
 %% Boxplots f�r Aufgabe 8
 
 % ssimss boxplot
 
-boxplot(ssims_aug); ylabel('SSIM');
-hold on
-boxplot(ssims_u); ylabel('SSIM');
+boxplot([RMSE_aug RMSEs_u]); ylabel('RMSE');
+legend('MLP','unet');
+saveas (gcf,'boxplotUnetRMSE.jpg');
+
+
+
+boxplot([ssims_aug ssims_u]); ylabel('SSIM');
 legend('MLP','unet');
 saveas (gcf,'boxplotUnetSSIM.jpg');
 
 
-boxplot(psnr_aug); ylabel('PSNR');
-hold on
-boxplot(psnr_u); ylabel('PSNR');
+boxplot([psnr_aug psnr_u]); ylabel('PSNR');
+
 legend('MLP','unet');
 saveas (gcf,'boxplotUnetPSNR.jpg');
 
-boxplot(corr_aug); ylabel('CORR');
-hold on
-boxplot(corr_u); ylabel('CORR');
+boxplot([corr_aug corr_u]); ylabel('CORR');
+
 legend('MLP','unet');
 saveas (gcf,'boxplotUnetCORR.jpg');
