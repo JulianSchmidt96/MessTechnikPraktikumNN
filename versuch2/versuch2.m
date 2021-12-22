@@ -154,7 +154,7 @@ save psnr_aug;
 display('saved SSIMs')
 %% correlation ceoff
 
-display('calculating corellation coeff ..')
+display('calculating correlation coeff and RMSE ..')
 
 
 corr_old = zeros(size(y_test,4),1);
@@ -184,7 +184,7 @@ for i=1:size(y_test,4)
     RMSE_aug = sqrt(mean((y_aug(:)-y_t(:)).^2));
 
     RMSEs_old(i) = RMSE_old;
-    RMSES_aug(i) = RMSE_aug ;
+    RMSEs_aug(i) = RMSE_aug ;
    
     
 end
@@ -209,7 +209,7 @@ display('saved criteria')
  saveas (gcf,'boxplotSSIM.jpg')
  
  
- boxplot(rmses, 'label',{' old dataset',' augmented data'}); ylabel('SSIM');
+ boxplot(rmses, 'label',{' old dataset',' augmented data'}); ylabel('RMSE');
  
  saveas (gcf,'boxplotRMSE.jpg')
  
@@ -251,7 +251,7 @@ unet_layers = replaceLayer(unet_layers,...
 
 unet_layers = connectLayers(unet_layers,...
 "Final-ConvolutionLayer","Reg-Layer");
-
+%%
 display('train unet ..')
 
 [unet, history_unet] =  trainNetwork(x_train_aug,y_train_aug,unet_layers,options);
@@ -262,10 +262,12 @@ save history_unet;
 
 display('finished unet training')
 %%
-
+%unet = load('unet.mat')
 
 display('calculating SSIMs ans PSNRs ..')
+
 y_unet = predict(unet, x_test);
+%%
 ssims_u = zeros(size(y_test,4),1);
 corr_u = zeros(size(y_test,4),1);
 psnr_u = zeros(size(y_test,4),1);
@@ -288,7 +290,7 @@ for i=1:size(y_test,4)
     
     corr_u(i) = coef_u(1,2);
     
-    RMSEs_u =  sqrt(mean((y_u-y_t).^2));
+    RMSEs_u(i) =  sqrt(mean((y_u(:)-y_t(:)).^2));
     
 end
 
@@ -303,7 +305,7 @@ save RMSEs_u;
 
 % ssimss boxplot
 
-boxplot([RMSE_aug RMSEs_u],'labels',{'MLP','unet'}); ylabel('RMSE');
+boxplot([RMSEs_aug RMSEs_u],'labels',{'MLP','unet'}); ylabel('RMSE');
 
 saveas (gcf,'boxplotUnetRMSE.jpg');
 
