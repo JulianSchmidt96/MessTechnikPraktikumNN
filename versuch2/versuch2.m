@@ -240,4 +240,59 @@ save history_unet;
 
 
 display('finished unet training')
+%%
+
+
+display('calculating SSIMs ans PSNRs ..')
+y_unet = predict(unet, x_test);
+ssims_u = zeros(size(y_test,4),1);
+corr_u = zeros(size(y_test,4),1);
+psnr_u = zeros(size(y_test,4),1);
+for i=1:size(y_test,4)
+    imwrite(y_test(:,:,:,i),'ref.jpg');
+    imwrite(y_unet(:,:,:,i),'unet.jpg');
+    
+    pic_u = imread('unet.jpg');
+    pic_ref = imread('ref.jpg');
+   
+    ssims_u(i) = ssim(pic_u,pic_ref);
+    
+    psnr_u(i) = psnr(pic_u, pic_ref);
+    y_u = y_unet(:,:,1,i);
+    
+
+    y_t = y_test(:,:,1,i);
+    coef_u = corrcoef(y_u(:),y_t(:));
+    
+    corr_u(i) = coef_u;
+    
+end
+
+save y_unet;
+save corr_u;
+save psnr_u;
+save ssims_u;
+    
+
 %% Boxplots f�r Aufgabe 8
+
+% ssimss boxplot
+
+boxplot(ssims_aug); ylabel('SSIM');
+hold on
+boxplot(ssims_u); ylabel('SSIM');
+legend('MLP','unet');
+saveas (gcf,'boxplotUnetSSIM.jpg');
+
+
+boxplot(psnr_aug); ylabel('PSNR');
+hold on
+boxplot(psnr_u); ylabel('PSNR');
+legend('MLP','unet');
+saveas (gcf,'boxplotUnetPSNR.jpg');
+
+boxplot(corr_aug); ylabel('CORR');
+hold on
+boxplot(corr_u); ylabel('CORR');
+legend('MLP','unet');
+saveas (gcf,'boxplotUnetCORR.jpg');
