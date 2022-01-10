@@ -3,8 +3,12 @@ clear all
 
 %% load dataset
 %  1. load the dataset
-
+load('/home/schmijul/MessTechnikPraktikumNN/MessTechnikPraktikumNN/versuch3/NNBV_Versuch3_MATLAB/upload_for_students/trainset.mat');
 %  2. define the input and output size for neural network
+x_train = trainset.images;
+y_train = trainset.labels;
+x_size = size(x_train, 1, 2);
+y_size = size(y_train, 1, 2);
 
 %% create MLP neural network - Aufgabe 3
 % Layers_MLP = [];
