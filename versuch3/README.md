@@ -1,9 +1,9 @@
 task1 done <br>
 task2 done <br>
-task3 <br>
-task4 <br>
-task5 <br>
-task6 <br>
-task7 <br>
-task8 <br>
-task9 <br>
+task3 open <br>
+task4 open <br>
+task5 open <br>
+task6 open <br>
+task7 open <br>
+task8 open <br>
+task9 open <br>
