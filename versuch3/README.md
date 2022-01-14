@@ -1,7 +1,7 @@
 task1 done <br>
 task2 done <br>
-task3 working <br>
-task4 open <br>
+task3 done <br>
+task4 working <br>
 task5 open <br>
 task6 open <br>
 task7 open <br>
