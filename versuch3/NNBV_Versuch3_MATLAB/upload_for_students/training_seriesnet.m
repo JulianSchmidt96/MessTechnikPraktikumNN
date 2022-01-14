@@ -4,6 +4,9 @@ clear all
 %% load dataset
 %  1. load the dataset
 load('/home/schmijul/MessTechnikPraktikumNN/MessTechnikPraktikumNN/versuch3/NNBV_Versuch3_MATLAB/upload_for_students/trainset.mat');
+load('/home/schmijul/MessTechnikPraktikumNN/MessTechnikPraktikumNN/versuch3/NNBV_Versuch3_MATLAB/upload_for_students/valset.mat');
+load('/home/schmijul/MessTechnikPraktikumNN/MessTechnikPraktikumNN/versuch3/NNBV_Versuch3_MATLAB/upload_for_students/testset.mat');
+
 
 %  2. define the input and output size for neural network
 
@@ -11,6 +14,13 @@ x_train = abs(trainset.images);
 y_train = trainset.labels;
 x_size = size(x_train, 1, 2, 3);
 y_size = size(y_train, 1, 2);
+
+x_val = abs(valset.images);
+y_val = valset.labels;
+
+x_test= abs(testset.images);
+y_test= testset.labels;
+
 input_size = x_size(1,2);%,x_size(1);
 output_size = 5;%;size(y_train(:,1)) ;
 
@@ -38,7 +48,7 @@ options = trainingOptions('sgdm', ...
     'LearnRateDropPeriod',5, ...
     'MaxEpochs',20, ...
     'MiniBatchSize',64, ...
-    'Plots','training-progress');
+    'ValidationData',{x_val,y_val});
 
 
 % training using "trainNetwork"
@@ -48,6 +58,7 @@ options = trainingOptions('sgdm', ...
 
 %% Test Network  - Aufgabe 4
 % use command "predict"
+y_pred_mlp = mlp.predict(x_test);
 
 % reconstruct field distribution
 % [] = mmf_rebuilt_image();
